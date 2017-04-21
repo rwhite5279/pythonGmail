@@ -11,7 +11,9 @@ email account). From Google account:
     My Account > Sign-in & security > Allow less secure apps: ON
 
 Note also that this script requires that the password for your 
-email account be placed in plaintext in this file. This is *very*
+email account be placed in a file called 'pw.txt', located in the
+same directory as this file. This is marginally safer than placing 
+the file in the script itself, but plaintext passwords are still
 unsafe. There are ways to manage password security for a script, 
 but they aren't addressed in this basic script.
 
@@ -29,10 +31,12 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 
 # Change this to your Gmail account that you're sending FROM
-gmail_user = "yourgmailaccount@gmail.com" 
+gmail_user = "yourUserID@gmail.com" 
 
-# Password to authenticate use of Gmail account. Unsafe!
-gmail_pwd = "yourpassword"      
+# Password stored in separate file 
+infile = open('pw.txt')
+gmail_pwd = infile.read()
+infile.close()
 
 def mail(to, subject, text):
     """to is the recipient, subject is the subject line of the
