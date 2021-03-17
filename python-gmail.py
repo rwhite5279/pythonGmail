@@ -21,33 +21,24 @@ For safety, do not use an important Gmail account for this script.
 An out-of-control script might cause you to run afoul of Google's
 Gmail policies.
 
-@author Richard White
-@version 2017-04-20
 """
 
+__author__ = "Richard White"
+__version__ = "2021-03-16"
+
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
+from email.message import EmailMessage
 
-# Change this to your Gmail account that you're sending FROM
-gmail_user = "yourUserID@gmail.com" 
-
-# Password stored in separate file 
-infile = open('pw.txt')
-gmail_pwd = infile.read()
-infile.close()
-
-def mail(to, subject, text):
+def mail(gmail_user, gmail_password, to, subject, text):
     """to is the recipient, subject is the subject line of the
     email, and text is the message that will be delivered in 
     the body of the email.
     """
-    msg = MIMEMultipart()
+    msg = EmailMessage()
     msg['From'] = gmail_user
     msg['To'] = to
     msg['Subject'] = subject
-    msg.attach(MIMEText(text))
+    msg.set_content(text)
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
     # next line establishes a connection with Google's smtp
     mailServer.ehlo()
@@ -55,13 +46,29 @@ def mail(to, subject, text):
     mailServer.starttls()
     # identify to server again as encrypted connection
     mailServer.ehlo()
-    mailServer.login(gmail_user, gmail_pwd)
-    mailServer.sendmail(gmail_user, to, msg.as_string())
+    mailServer.login(gmail_user, gmail_password)
+    # mailServer.sendmail(gmail_user, to, msg)
+    mailServer.send_message(msg)
     mailServer.quit()
 
-# This function call initiates the function defined above, 
-# with the parameters being the intended recipient, the 
-# subject line, and the body of the message.
-mail("recipient@someISP.com",
-    "Your subject line goes here",
-    "This is the body of the email.\n\nPut your text in here and it will be delivered via email.")
+def main():
+    # Get the Gmail username from a separate file
+    infile = open('gmail_username.txt')
+    gmail_user = infile.read().rstrip()
+    infile.close()
+    # Password stored in separate file 
+    infile = open('gmail_password.txt')
+    gmail_password = infile.read().rstrip()
+    infile.close()
+    # This function call initiates the function defined above, 
+    # with the parameters being the sender, intended recipient, the 
+    # subject line, and the body of the message.
+    recipient = "person@domain.com"  # replace with actual email
+    subject = "This was sent by a script!"
+    body = "Can you believe this was sent by a computer?\n\nIt was!\n\n"
+    mail(gmail_user, gmail_password, recipient, subject, body)
+
+if __name__ == "__main__":
+    main()
+
+
