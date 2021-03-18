@@ -30,25 +30,33 @@ import smtplib
 from email.message import EmailMessage
 
 def mail(gmail_user, gmail_password, to, subject, text):
-    """to is the recipient, subject is the subject line of the
-    email, and text is the message that will be delivered in 
-    the body of the email.
+    """gmail_user = the sender
+       gmail_password = password for senders Gmail account
+       to = the recipient's email
+       subject = subject is the subject line of the email
+       text = the message that will be delivered in email body
     """
+    # Set up Python EmailMessage object as msg
     msg = EmailMessage()
     msg['From'] = gmail_user
     msg['To'] = to
     msg['Subject'] = subject
     msg.set_content(text)
+    # Establish server object for connecting to email server at the
+    # indicated port. This object has methods we can use to send emails.
+    # Sweigart, in "Automate the Boring Stuff with Python" says that
+    # a server may not support TLS on 587. In that case, use 
+    # smtplib.SMTP_SSL() and port 465 instead.
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-    # next line establishes a connection with Google's smtp
+    # Establish a connection with Google's smtp server
     mailServer.ehlo()
-    # use tls encryption
+    # Use tls encryption
     mailServer.starttls()
-    # identify to server again as encrypted connection
-    mailServer.ehlo()
+    # Log in to the server using credentials
     mailServer.login(gmail_user, gmail_password)
-    # mailServer.sendmail(gmail_user, to, msg)
+    # Send the email that we composed
     mailServer.send_message(msg)
+    # Disconnect from the server
     mailServer.quit()
 
 def main():
