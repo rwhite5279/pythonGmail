@@ -10,11 +10,12 @@ email account). From Google account:
 
     My Account > Sign-in & security > Allow less secure apps: ON
 
-Note also that this script requires that the password for your 
-email account be placed in a file called 'pw.txt', located in the
+Note also that this script requires that the username for your 
+Gmail account be placed in a text file called `gmail_username.txt`,
+and the password for that Gmail account be placed in a file called`gmail_password.txt`, with both of these files located in the
 same directory as this file. This is marginally safer than placing 
-the file in the script itself, but plaintext passwords are still
-unsafe. There are ways to manage password security for a script, 
+that information in the script itself, but plaintext passwords are 
+still unsafe. There are ways to manage password security for a script, 
 but they aren't addressed in this basic script.
 
 For safety, do not use an important Gmail account for this script.
